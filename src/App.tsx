@@ -2,37 +2,105 @@ import { useState } from 'react';
 import { ChevronRight, ChevronLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-// Trade data organized by month
+// Expanded trade data by month
 const tradesByMonth = {
+  '2025-04': [
+    { date: '2025-04-01', day: 1, pl: 468, trades: 2, winRate: 100, type: 'win' },
+    { date: '2025-04-03', day: 3, pl: 134, trades: 2, winRate: 50, type: 'mixed' },
+    { date: '2025-04-04', day: 4, pl: 229, trades: 1, winRate: 100, type: 'win' },
+    { date: '2025-04-07', day: 7, pl: 63, trades: 3, winRate: 33.33, type: 'loss' },
+    { date: '2025-04-08', day: 8, pl: 715, trades: 1, winRate: 100, type: 'win' },
+    { date: '2025-04-09', day: 9, pl: 383, trades: 2, winRate: 50, type: 'mixed' },
+    { date: '2025-04-10', day: 10, pl: 92.5, trades: 9, winRate: 25, type: 'loss' },
+    { date: '2025-04-11', day: 11, pl: 206, trades: 3, winRate: 50, type: 'mixed' },
+    { date: '2025-04-13', day: 13, pl: -586, trades: 4, winRate: 0, type: 'loss' },
+    { date: '2025-04-14', day: 14, pl: 880, trades: 5, winRate: 50, type: 'mixed' },
+    { date: '2025-04-15', day: 15, pl: 663, trades: 1, winRate: 100, type: 'win' },
+    { date: '2025-04-16', day: 16, pl: 311, trades: 2, winRate: 100, type: 'win' },
+    { date: '2025-04-17', day: 17, pl: 170, trades: 1, winRate: 100, type: 'win' },
+    { date: '2025-04-21', day: 21, pl: -222, trades: 3, winRate: 0, type: 'loss' },
+    { date: '2025-04-22', day: 22, pl: -546, trades: 2, winRate: 0, type: 'loss' },
+    { date: '2025-04-23', day: 23, pl: 248, trades: 1, winRate: 100, type: 'win' },
+    { date: '2025-04-24', day: 24, pl: -493, trades: 5, winRate: 40, type: 'loss' },
+    { date: '2025-04-28', day: 28, pl: 570, trades: 1, winRate: 100, type: 'win' }
+  ],
   '2026-04': [
-    { date: '2026-04-01', day: 1, trades: [{ id: 1, ticket: 'SPY-401', symbol: 'SPY', contract: '1 Call', pl: 450, roi: 18, type: 'Call' }] },
-    { date: '2026-04-03', day: 3, trades: [{ id: 2, ticket: 'QQQ-302', symbol: 'QQQ', contract: '2 Put', pl: 620, roi: 22, type: 'Put' }, { id: 3, ticket: 'AAPL-101', symbol: 'AAPL', contract: '1 Call', pl: 380, roi: 15, type: 'Call' }] },
-    { date: '2026-04-05', day: 5, trades: [{ id: 4, ticket: 'TSLA-201', symbol: 'TSLA', contract: '1 Put', pl: 520, roi: 19, type: 'Put' }] },
-    { date: '2026-04-08', day: 8, trades: [{ id: 5, ticket: 'NQ-401', symbol: 'NQ', contract: '3 Call', pl: 890, roi: 26, type: 'Call' }] },
-    { date: '2026-04-12', day: 12, trades: [{ id: 6, ticket: 'ES-501', symbol: 'ES', contract: '1 Call', pl: 750, roi: 28, type: 'Call' }, { id: 7, ticket: 'GLD-101', symbol: 'GLD', contract: '2 Put', pl: 410, roi: 16, type: 'Put' }] },
-    { date: '2026-04-15', day: 15, trades: [{ id: 8, ticket: 'MSFT-201', symbol: 'MSFT', contract: '1 Call', pl: 630, roi: 21, type: 'Call' }] },
-    { date: '2026-04-18', day: 18, trades: [{ id: 9, ticket: 'NVDA-301', symbol: 'NVDA', contract: '2 Put', pl: 780, roi: 24, type: 'Put' }] },
-    { date: '2026-04-22', day: 22, trades: [{ id: 10, ticket: 'AMZN-101', symbol: 'AMZN', contract: '1 Call', pl: 540, roi: 20, type: 'Call' }, { id: 11, ticket: 'META-201', symbol: 'META', contract: '1 Put', pl: 360, roi: 14, type: 'Put' }] },
-    { date: '2026-04-25', day: 25, trades: [{ id: 12, ticket: 'GOOGL-301', symbol: 'GOOGL', contract: '1 Call', pl: 710, roi: 25, type: 'Call' }] },
-    { date: '2026-04-29', day: 29, trades: [{ id: 13, ticket: 'XLE-101', symbol: 'XLE', contract: '2 Call', pl: 480, roi: 17, type: 'Call' }] }
+    { date: '2026-04-01', day: 1, pl: 450, trades: 2, winRate: 100, type: 'win' },
+    { date: '2026-04-03', day: 3, pl: 620, trades: 2, winRate: 50, type: 'mixed' },
+    { date: '2026-04-05', day: 5, pl: 520, trades: 1, winRate: 100, type: 'win' },
+    { date: '2026-04-08', day: 8, pl: 890, trades: 3, winRate: 100, type: 'win' },
+    { date: '2026-04-12', day: 12, pl: 750, trades: 2, winRate: 100, type: 'win' },
+    { date: '2026-04-15', day: 15, pl: 630, trades: 1, winRate: 100, type: 'win' },
+    { date: '2026-04-18', day: 18, pl: 780, trades: 2, winRate: 100, type: 'win' },
+    { date: '2026-04-22', day: 22, pl: 540, trades: 2, winRate: 100, type: 'win' },
+    { date: '2026-04-25', day: 25, pl: 710, trades: 1, winRate: 100, type: 'win' },
+    { date: '2026-04-29', day: 29, pl: 480, trades: 2, winRate: 100, type: 'win' }
   ],
   '2026-05': [
-    { date: '2026-05-20', day: 20, trades: [{ id: 1, ticket: 'NQ-7700', symbol: 'NQ', contract: '1 Call', pl: 1620, roi: 32, type: 'Call' }, { id: 2, ticket: 'AAPL-193', symbol: 'AAPL', contract: '2 Put', pl: 570, roi: 19, type: 'Put' }] },
-    { date: '2026-05-21', day: 21, trades: [{ id: 3, ticket: 'ES-5600', symbol: 'ES', contract: '1 Call', pl: 920, roi: 42, type: 'Call' }] },
-    { date: '2026-05-22', day: 22, trades: [{ id: 4, ticket: 'TSLA-241', symbol: 'TSLA', contract: '1 Put', pl: 870, roi: 25, type: 'Put' }] },
-    { date: '2026-05-23', day: 23, trades: [{ id: 5, ticket: 'SPY-420', symbol: 'SPY', contract: '1 Call', pl: 1290, roi: 31, type: 'Call' }] },
-    { date: '2026-05-24', day: 24, trades: [{ id: 6, ticket: 'NVDA-580', symbol: 'NVDA', contract: '1 Put', pl: 410, roi: 23, type: 'Put' }, { id: 7, ticket: 'MSFT-388', symbol: 'MSFT', contract: '1 Call', pl: 540, roi: 28, type: 'Call' }] }
+    { date: '2026-05-20', day: 20, pl: 1620, trades: 2, winRate: 100, type: 'win' },
+    { date: '2026-05-21', day: 21, pl: 920, trades: 1, winRate: 100, type: 'win' },
+    { date: '2026-05-22', day: 22, pl: 870, trades: 1, winRate: 100, type: 'win' },
+    { date: '2026-05-23', day: 23, pl: 1290, trades: 1, winRate: 100, type: 'win' },
+    { date: '2026-05-24', day: 24, pl: 950, trades: 2, winRate: 100, type: 'win' }
   ]
 };
 
-const portfolioHistory = [
-  { date: 'May 18', value: 95000 },
-  { date: 'May 19', value: 96200 },
-  { date: 'May 20', value: 97900 },
-  { date: 'May 21', value: 99350 },
-  { date: 'May 22', value: 100800 },
-  { date: 'May 23', value: 102430 },
-  { date: 'May 24', value: 103900 }
+const allTimePortfolioData = [
+  { date: 'Jan', value: 50000 },
+  { date: 'Feb', value: 52000 },
+  { date: 'Mar', value: 48000 },
+  { date: 'Apr', value: 55000 },
+  { date: 'May', value: 60000 },
+  { date: 'Jun', value: 58000 },
+  { date: 'Jul', value: 65000 },
+  { date: 'Aug', value: 70000 },
+  { date: 'Sep', value: 68000 },
+  { date: 'Oct', value: 75000 },
+  { date: 'Nov', value: 82000 },
+  { date: 'Dec', value: 95000 }
+];
+
+const dayPortfolioData = [
+  { date: 'Mon', value: 95000 },
+  { date: 'Tue', value: 96200 },
+  { date: 'Wed', value: 97900 },
+  { date: 'Thu', value: 99350 },
+  { date: 'Fri', value: 100800 },
+  { date: 'Sat', value: 102430 },
+  { date: 'Sun', value: 103900 }
+];
+
+const weekPortfolioData = [
+  { date: 'W1', value: 95000 },
+  { date: 'W2', value: 97200 },
+  { date: 'W3', value: 99500 },
+  { date: 'W4', value: 101800 },
+  { date: 'W5', value: 103900 }
+];
+
+const monthsPortfolioData = [
+  { date: 'Jan', value: 50000 },
+  { date: 'Feb', value: 55000 },
+  { date: 'Mar', value: 60000 },
+  { date: 'Apr', value: 70000 },
+  { date: 'May', value: 103900 }
+];
+
+const sixMonthsPortfolioData = [
+  { date: 'Dec', value: 60000 },
+  { date: 'Jan', value: 62000 },
+  { date: 'Feb', value: 65000 },
+  { date: 'Mar', value: 70000 },
+  { date: 'Apr', value: 85000 },
+  { date: 'May', value: 103900 }
+];
+
+const yearPortfolioData = [
+  { date: 'May 24', value: 50000 },
+  { date: 'Aug 24', value: 55000 },
+  { date: 'Nov 24', value: 65000 },
+  { date: 'Feb 25', value: 75000 },
+  { date: 'May 25', value: 103900 }
 ];
 
 function App() {
@@ -43,11 +111,8 @@ function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [currentMonth, setCurrentMonth] = useState('2026-05');
-  const [expandedDay, setExpandedDay] = useState<string | null>(null);
   const [showPortfolioChart, setShowPortfolioChart] = useState(false);
-  const [showWeeklySummary, setShowWeeklySummary] = useState(false);
-
-  const totalPortfolio = 103900;
+  const [dateRange, setDateRange] = useState('week');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,8 +131,7 @@ function App() {
 
   const getMonthDays = (monthStr: string) => {
     const [year, month] = monthStr.split('-');
-    const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
-    return daysInMonth;
+    return new Date(parseInt(year), parseInt(month), 0).getDate();
   };
 
   const getMonthName = (monthStr: string) => {
@@ -90,21 +154,55 @@ function App() {
     }
 
     setCurrentMonth(`${newYear}-${String(newMonth).padStart(2, '0')}`);
-    setExpandedDay(null);
   };
 
   const currentMonthTrades = tradesByMonth[currentMonth as keyof typeof tradesByMonth] || [];
-
-  const monthYear = currentMonth.split('-');
+  const [monthYear] = currentMonth.split('-');
   const daysInMonth = getMonthDays(currentMonth);
   const firstDayOfMonth = new Date(`${currentMonth}-01`).getDay();
 
-  const weeklySummary = {
-    trades: (tradesByMonth['2026-05'] || []).reduce((sum, day) => sum + day.trades.length, 0),
-    winRate: '78%',
-    avgPl: '$710',
-    netGain: '$3,900'
+  const getPortfolioData = () => {
+    switch (dateRange) {
+      case 'day':
+        return dayPortfolioData;
+      case 'week':
+        return weekPortfolioData;
+      case 'month':
+        return monthsPortfolioData;
+      case 'sixmonths':
+        return sixMonthsPortfolioData;
+      case 'year':
+        return yearPortfolioData;
+      default:
+        return allTimePortfolioData;
+    }
   };
+
+  const calculateWeeklyStats = () => {
+    const weeks: { [key: number]: { pl: number; trades: number; days: number; type: 'win' | 'loss' | 'mixed' } } = {};
+
+    currentMonthTrades.forEach((trade) => {
+      const week = Math.ceil(trade.day / 7);
+      if (!weeks[week]) {
+        weeks[week] = { pl: 0, trades: 0, days: 0, type: 'mixed' };
+      }
+      weeks[week].pl += trade.pl;
+      weeks[week].trades += trade.trades;
+      weeks[week].days += 1;
+
+      if (trade.pl > 0 && weeks[week].type !== 'mixed') {
+        weeks[week].type = 'win';
+      } else if (trade.pl < 0) {
+        weeks[week].type = 'loss';
+      } else if (weeks[week].type === 'win') {
+        weeks[week].type = 'mixed';
+      }
+    });
+
+    return weeks;
+  };
+
+  const weeklyStats = calculateWeeklyStats();
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -188,10 +286,10 @@ function App() {
                   </button>
                 </form>
 
-                <div className="mt-4 flex items-center gap-2 text-center text-sm">
+                <div className="mt-4 text-center">
                   <button
                     onClick={() => setShowForgotPassword(true)}
-                    className="text-indigo-600 hover:text-indigo-500 font-medium"
+                    className="text-sm text-indigo-600 hover:text-indigo-500 font-medium"
                   >
                     Forgot password?
                   </button>
@@ -201,7 +299,7 @@ function App() {
                   <p className="mb-4 text-center text-sm text-slate-600">Follow us</p>
                   <div className="flex justify-center gap-4">
                     <a
-                      href="https://twitter.com"
+                      href="https://x.com/novatraderofficial"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition hover:bg-slate-200 hover:text-slate-900"
@@ -212,7 +310,7 @@ function App() {
                       </svg>
                     </a>
                     <a
-                      href="https://instagram.com"
+                      href="https://instagram.com/novatraderofficial"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition hover:bg-slate-200 hover:text-slate-900"
@@ -225,7 +323,7 @@ function App() {
                       </svg>
                     </a>
                     <a
-                      href="https://discord.com"
+                      href="https://discord.gg/cMeEXC9Ua"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition hover:bg-slate-200 hover:text-slate-900"
@@ -280,31 +378,52 @@ function App() {
                   className="rounded-[1.5rem] bg-white p-6 shadow-md transition hover:shadow-lg"
                 >
                   <p className="text-sm uppercase tracking-[0.24em] text-slate-500">Current Portfolio</p>
-                  <p className="mt-3 text-3xl font-semibold text-slate-950">${totalPortfolio.toLocaleString()}</p>
+                  <p className="mt-3 text-3xl font-semibold text-slate-950">$103,900</p>
                   <p className="mt-2 text-sm text-indigo-600">↑ Up 4.1% this week</p>
                 </button>
                 <div className="rounded-[1.5rem] bg-white p-6 shadow-md">
                   <p className="text-sm uppercase tracking-[0.24em] text-slate-500">Weekly Returns</p>
                   <p className="mt-3 text-3xl font-semibold text-slate-950">$3,900</p>
-                  <p className="mt-2 text-sm text-slate-500">{weeklySummary.trades} trades, 78% win</p>
+                  <p className="mt-2 text-sm text-slate-500">5 trades, 100% win</p>
                 </div>
-                <button
-                  onClick={() => setShowWeeklySummary(!showWeeklySummary)}
-                  className="rounded-[1.5rem] bg-indigo-600 p-6 text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-500"
-                >
-                  <p className="text-sm uppercase tracking-[0.24em] text-indigo-200">Weekly Summary</p>
-                  <p className="mt-3 text-3xl font-semibold">See breakdown</p>
-                  <ChevronRight className="mt-2 h-5 w-5" />
-                </button>
+                <div className="rounded-[1.5rem] bg-indigo-600 p-6 text-white shadow-lg shadow-indigo-500/20">
+                  <p className="text-sm uppercase tracking-[0.24em] text-indigo-200">This Month</p>
+                  <p className="mt-3 text-3xl font-semibold">May 2026</p>
+                  <p className="mt-2 text-sm text-indigo-100">5 trading days</p>
+                </div>
               </div>
 
               {/* Portfolio Chart */}
               {showPortfolioChart && (
-                <div className="rounded-[1.5rem] bg-white p-6 shadow-md">
-                  <h3 className="mb-6 text-lg font-semibold text-slate-950">Portfolio History</h3>
-                  <ResponsiveContainer width="100%" height={400}>
-                    <LineChart data={portfolioHistory}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                <div className="rounded-[1.5rem] bg-white p-8 shadow-md">
+                  <div className="mb-6 flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-slate-950">Portfolio History</h3>
+                    <div className="flex gap-2">
+                      {[
+                        { label: 'Day', value: 'day' },
+                        { label: 'Week', value: 'week' },
+                        { label: '3M', value: 'month' },
+                        { label: '6M', value: 'sixmonths' },
+                        { label: '1Y', value: 'year' },
+                        { label: 'All', value: 'all' }
+                      ].map((range) => (
+                        <button
+                          key={range.value}
+                          onClick={() => setDateRange(range.value)}
+                          className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                            dateRange === range.value
+                              ? 'bg-indigo-600 text-white'
+                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                          }`}
+                        >
+                          {range.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <ResponsiveContainer width="100%" height={350}>
+                    <LineChart data={getPortfolioData()}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                       <XAxis 
                         dataKey="date" 
                         stroke="#94a3b8"
@@ -313,7 +432,7 @@ function App() {
                       <YAxis 
                         stroke="#94a3b8"
                         style={{ fontSize: '12px' }}
-                        tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                        tickFormatter={(value) => `$${(value / 1000).toFixed(1)}k`}
                       />
                       <Tooltip
                         contentStyle={{
@@ -328,9 +447,8 @@ function App() {
                       <Line 
                         type="monotone" 
                         dataKey="value" 
-                        stroke="#4f46e5" 
-                        dot={{ fill: '#4f46e5', r: 5 }}
-                        activeDot={{ r: 7 }}
+                        stroke="#3b82f6" 
+                        dot={false}
                         strokeWidth={3}
                       />
                     </LineChart>
@@ -338,118 +456,102 @@ function App() {
                 </div>
               )}
 
-              {/* Weekly Summary */}
-              {showWeeklySummary && (
-                <div className="rounded-[1.5rem] bg-indigo-600/5 p-6 ring-1 ring-indigo-200">
-                  <h3 className="text-sm uppercase tracking-[0.28em] font-semibold text-indigo-700">Weekly Performance</h3>
-                  <div className="mt-6 grid gap-4 sm:grid-cols-4">
-                    <div className="rounded-2xl bg-white p-4 shadow-sm">
-                      <p className="text-sm text-slate-500">Total Trades</p>
-                      <p className="mt-3 text-2xl font-semibold text-slate-900">{weeklySummary.trades}</p>
-                    </div>
-                    <div className="rounded-2xl bg-white p-4 shadow-sm">
-                      <p className="text-sm text-slate-500">Win Rate</p>
-                      <p className="mt-3 text-2xl font-semibold text-slate-900">{weeklySummary.winRate}</p>
-                    </div>
-                    <div className="rounded-2xl bg-white p-4 shadow-sm">
-                      <p className="text-sm text-slate-500">Avg Profit</p>
-                      <p className="mt-3 text-2xl font-semibold text-slate-900">{weeklySummary.avgPl}</p>
-                    </div>
-                    <div className="rounded-2xl bg-white p-4 shadow-sm">
-                      <p className="text-sm text-slate-500">Net Gain</p>
-                      <p className="mt-3 text-2xl font-semibold text-slate-900">{weeklySummary.netGain}</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* Trade Calendar */}
-              <div className="rounded-[1.5rem] bg-white p-6 shadow-md">
-                <div className="mb-6 flex items-center justify-between">
-                  <h2 className="text-2xl font-semibold text-slate-950">Trade Calendar</h2>
-                  <div className="flex items-center gap-4">
+              <div className="rounded-[1.5rem] bg-slate-900 p-8 shadow-lg">
+                <div className="mb-8 flex items-center justify-between">
+                  <div className="flex items-center gap-6">
                     <button
                       onClick={() => changeMonth(-1)}
-                      className="rounded-full border border-slate-200 p-2 transition hover:bg-slate-50"
+                      className="rounded-full p-2 transition hover:bg-slate-800"
                     >
-                      <ChevronLeft className="h-5 w-5" />
+                      <ChevronLeft className="h-6 w-6 text-white" />
                     </button>
-                    <span className="min-w-[120px] text-center text-lg font-semibold">
-                      {getMonthName(currentMonth)} {monthYear[0]}
-                    </span>
+                    <div>
+                      <span className="text-2xl font-bold text-white">{getMonthName(currentMonth)} {monthYear}</span>
+                    </div>
                     <button
                       onClick={() => changeMonth(1)}
-                      className="rounded-full border border-slate-200 p-2 transition hover:bg-slate-50"
+                      className="rounded-full p-2 transition hover:bg-slate-800"
                     >
-                      <ChevronRight className="h-5 w-5" />
+                      <ChevronRight className="h-6 w-6 text-white" />
                     </button>
+                    <button className="ml-4 rounded-full border border-slate-700 px-4 py-2 text-sm text-slate-300 transition hover:border-slate-600 hover:text-white">
+                      This month
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm text-slate-300">
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 rounded-full bg-emerald-500"></span>
+                      <span>Green = Profit</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="h-3 w-3 rounded-full bg-red-600"></span>
+                      <span>Red = Loss</span>
+                    </div>
                   </div>
                 </div>
 
-                {/* Calendar Grid */}
-                <div className="space-y-4">
-                  <div className="grid grid-cols-7 gap-2">
-                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                      <div key={day} className="text-center font-semibold text-slate-500 py-2 text-sm">
-                        {day}
-                      </div>
-                    ))}
-                  </div>
+                <div className="grid grid-cols-[1fr_auto] gap-8">
+                  {/* Calendar */}
+                  <div>
+                    <div className="grid grid-cols-7 gap-2 mb-4">
+                      {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                        <div key={day} className="text-center font-semibold text-slate-400 py-2 text-sm">
+                          {day}
+                        </div>
+                      ))}
+                    </div>
 
-                  <div className="grid grid-cols-7 gap-2">
-                    {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-                      <div key={`empty-${i}`} className="aspect-square" />
-                    ))}
+                    <div className="grid grid-cols-7 gap-2">
+                      {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+                        <div key={`empty-${i}`} className="aspect-square" />
+                      ))}
 
-                    {Array.from({ length: daysInMonth }).map((_, i) => {
-                      const day = i + 1;
-                      const dateStr = `${currentMonth}-${String(day).padStart(2, '0')}`;
-                      const dayTrades = currentMonthTrades.find((t) => t.date === dateStr);
-                      const hasExpandedDay = expandedDay === dateStr;
+                      {Array.from({ length: daysInMonth }).map((_, i) => {
+                        const day = i + 1;
+                        const dateStr = `${currentMonth}-${String(day).padStart(2, '0')}`;
+                        const dayData = currentMonthTrades.find((t) => t.date === dateStr);
 
-                      return (
-                        <div key={day}>
-                          <button
-                            onClick={() => setExpandedDay(hasExpandedDay ? null : dateStr)}
-                            className={`aspect-square w-full rounded-lg p-2 text-sm transition ${
-                              dayTrades
-                                ? 'bg-indigo-50 border-2 border-indigo-300 font-semibold text-indigo-700 hover:bg-indigo-100'
-                                : 'bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100'
+                        if (!dayData) {
+                          return <div key={day} className="aspect-square rounded-lg bg-slate-800" />;
+                        }
+
+                        const isPositive = dayData.pl > 0;
+                        const isNegative = dayData.pl < 0;
+
+                        return (
+                          <div
+                            key={day}
+                            className={`aspect-square rounded-lg border-2 p-2 flex flex-col justify-center items-center text-center transition ${
+                              isPositive
+                                ? 'border-emerald-500/50 bg-emerald-950/30'
+                                : isNegative
+                                ? 'border-red-600/50 bg-red-950/30'
+                                : 'border-slate-700 bg-slate-800'
                             }`}
                           >
-                            {day}
-                            {dayTrades && <div className="text-xs mt-1">{dayTrades.trades.length} trade(s)</div>}
-                          </button>
+                            <p className="text-xs text-slate-400 font-medium">{day}</p>
+                            <p className={`text-sm font-bold mt-1 ${isPositive ? 'text-emerald-400' : isNegative ? 'text-red-400' : 'text-slate-300'}`}>
+                              ${Math.abs(dayData.pl)}
+                            </p>
+                            <p className="text-xs text-slate-500">{dayData.trades} trade(s)</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
 
-                          {hasExpandedDay && dayTrades && (
-                            <div className="absolute left-6 right-6 z-10 mt-2 max-h-80 overflow-y-auto rounded-lg bg-white p-4 shadow-xl border border-slate-200">
-                              <h4 className="mb-3 font-semibold text-slate-900">
-                                {new Date(dateStr).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
-                              </h4>
-                              <div className="space-y-2">
-                                {dayTrades.trades.map((trade) => (
-                                  <div key={trade.id} className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-2 rounded-lg bg-slate-50 p-3 text-sm">
-                                    <div>
-                                      <p className="text-xs text-slate-500">Symbol</p>
-                                      <p className="font-semibold">{trade.symbol}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-slate-500">Type</p>
-                                      <p className={`font-semibold ${trade.type === 'Call' ? 'text-green-600' : 'text-red-600'}`}>{trade.type}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-slate-500">P/L $</p>
-                                      <p className="font-semibold">${trade.pl.toLocaleString()}</p>
-                                    </div>
-                                    <div>
-                                      <p className="text-xs text-slate-500">P/L %</p>
-                                      <p className="font-semibold">{trade.roi}%</p>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
+                  {/* Weekly Stats */}
+                  <div className="space-y-3 min-w-[180px]">
+                    {Object.entries(weeklyStats).map(([week, stats]) => {
+                      const isPositive = stats.pl > 0;
+                      return (
+                        <div key={week} className="rounded-lg bg-slate-800 p-4 border border-slate-700">
+                          <p className="text-sm font-semibold text-slate-400">Week {week}</p>
+                          <p className={`text-xl font-bold mt-2 ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
+                            ${stats.pl > 0 ? '+' : ''}{stats.pl.toLocaleString()}
+                          </p>
+                          <p className="text-xs text-slate-500 mt-1">{stats.days} day(s)</p>
                         </div>
                       );
                     })}

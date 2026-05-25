@@ -1,47 +1,402 @@
 import { useState } from 'react';
-import { ChevronRight, ChevronLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Eye, EyeOff } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-// Expanded trade data by month
+// Expanded trade data by month with day details
 const tradesByMonth = {
   '2025-04': [
-    { date: '2025-04-01', day: 1, pl: 468, trades: 2, winRate: 100, type: 'win' },
-    { date: '2025-04-03', day: 3, pl: 134, trades: 2, winRate: 50, type: 'mixed' },
-    { date: '2025-04-04', day: 4, pl: 229, trades: 1, winRate: 100, type: 'win' },
-    { date: '2025-04-07', day: 7, pl: 63, trades: 3, winRate: 33.33, type: 'loss' },
-    { date: '2025-04-08', day: 8, pl: 715, trades: 1, winRate: 100, type: 'win' },
-    { date: '2025-04-09', day: 9, pl: 383, trades: 2, winRate: 50, type: 'mixed' },
-    { date: '2025-04-10', day: 10, pl: 92.5, trades: 9, winRate: 25, type: 'loss' },
-    { date: '2025-04-11', day: 11, pl: 206, trades: 3, winRate: 50, type: 'mixed' },
-    { date: '2025-04-13', day: 13, pl: -586, trades: 4, winRate: 0, type: 'loss' },
-    { date: '2025-04-14', day: 14, pl: 880, trades: 5, winRate: 50, type: 'mixed' },
-    { date: '2025-04-15', day: 15, pl: 663, trades: 1, winRate: 100, type: 'win' },
-    { date: '2025-04-16', day: 16, pl: 311, trades: 2, winRate: 100, type: 'win' },
-    { date: '2025-04-17', day: 17, pl: 170, trades: 1, winRate: 100, type: 'win' },
-    { date: '2025-04-21', day: 21, pl: -222, trades: 3, winRate: 0, type: 'loss' },
-    { date: '2025-04-22', day: 22, pl: -546, trades: 2, winRate: 0, type: 'loss' },
-    { date: '2025-04-23', day: 23, pl: 248, trades: 1, winRate: 100, type: 'win' },
-    { date: '2025-04-24', day: 24, pl: -493, trades: 5, winRate: 40, type: 'loss' },
-    { date: '2025-04-28', day: 28, pl: 570, trades: 1, winRate: 100, type: 'win' }
+    {
+      date: '2025-04-01',
+      day: 1,
+      pl: 468,
+      trades: 2,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'AAPL', ticket: 'AAPL2405C', type: 'Call', pl: 280, plPercent: 5.9 },
+        { symbol: 'SPY', ticket: 'SPY2405P', type: 'Put', pl: 188, plPercent: 3.7 }
+      ]
+    },
+    {
+      date: '2025-04-03',
+      day: 3,
+      pl: 134,
+      trades: 2,
+      winRate: 50,
+      type: 'mixed',
+      tradesInfo: [
+        { symbol: 'NVDA', ticket: 'NVDA2405C', type: 'Call', pl: 210, plPercent: 4.1 },
+        { symbol: 'QQQ', ticket: 'QQQ2405P', type: 'Put', pl: -76, plPercent: -1.5 }
+      ]
+    },
+    {
+      date: '2025-04-04',
+      day: 4,
+      pl: 229,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'MSFT', ticket: 'MSFT2405C', type: 'Call', pl: 229, plPercent: 4.8 }
+      ]
+    },
+    {
+      date: '2025-04-07',
+      day: 7,
+      pl: 63,
+      trades: 3,
+      winRate: 33.33,
+      type: 'loss',
+      tradesInfo: [
+        { symbol: 'TSLA', ticket: 'TSLA2405P', type: 'Put', pl: -120, plPercent: -2.4 },
+        { symbol: 'NFLX', ticket: 'NFLX2405C', type: 'Call', pl: 90, plPercent: 1.8 },
+        { symbol: 'AMD', ticket: 'AMD2405P', type: 'Put', pl: 93, plPercent: 1.9 }
+      ]
+    },
+    {
+      date: '2025-04-08',
+      day: 8,
+      pl: 715,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'GOOG', ticket: 'GOOG2405C', type: 'Call', pl: 715, plPercent: 9.1 }
+      ]
+    },
+    {
+      date: '2025-04-09',
+      day: 9,
+      pl: 383,
+      trades: 2,
+      winRate: 50,
+      type: 'mixed',
+      tradesInfo: [
+        { symbol: 'AMZN', ticket: 'AMZN2405P', type: 'Put', pl: -120, plPercent: -2.3 },
+        { symbol: 'SPY', ticket: 'SPY2405C', type: 'Call', pl: 503, plPercent: 4.7 }
+      ]
+    },
+    {
+      date: '2025-04-10',
+      day: 10,
+      pl: 92.5,
+      trades: 9,
+      winRate: 25,
+      type: 'loss',
+      tradesInfo: [
+        { symbol: 'AAPL', ticket: 'AAPL2405P', type: 'Put', pl: 60, plPercent: 1.2 },
+        { symbol: 'TSLA', ticket: 'TSLA2405C', type: 'Call', pl: -150, plPercent: -3.0 },
+        { symbol: 'QQQ', ticket: 'QQQ2405P', type: 'Put', pl: 183, plPercent: 2.8 }
+      ]
+    },
+    {
+      date: '2025-04-11',
+      day: 11,
+      pl: 206,
+      trades: 3,
+      winRate: 50,
+      type: 'mixed',
+      tradesInfo: [
+        { symbol: 'NVDA', ticket: 'NVDA2405C', type: 'Call', pl: 250, plPercent: 5.2 },
+        { symbol: 'MSFT', ticket: 'MSFT2405P', type: 'Put', pl: -44, plPercent: -0.9 }
+      ]
+    },
+    {
+      date: '2025-04-13',
+      day: 13,
+      pl: -586,
+      trades: 4,
+      winRate: 0,
+      type: 'loss',
+      tradesInfo: [
+        { symbol: 'AAPL', ticket: 'AAPL2405P', type: 'Put', pl: -180, plPercent: -3.6 },
+        { symbol: 'GOOG', ticket: 'GOOG2405C', type: 'Call', pl: -240, plPercent: -4.5 },
+        { symbol: 'SPY', ticket: 'SPY2405P', type: 'Put', pl: -166, plPercent: -2.8 }
+      ]
+    },
+    {
+      date: '2025-04-14',
+      day: 14,
+      pl: 880,
+      trades: 5,
+      winRate: 50,
+      type: 'mixed',
+      tradesInfo: [
+        { symbol: 'NVDA', ticket: 'NVDA2405C', type: 'Call', pl: 330, plPercent: 5.7 },
+        { symbol: 'TSLA', ticket: 'TSLA2405P', type: 'Put', pl: 550, plPercent: 8.2 }
+      ]
+    },
+    {
+      date: '2025-04-15',
+      day: 15,
+      pl: 663,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'NFLX', ticket: 'NFLX2405C', type: 'Call', pl: 663, plPercent: 7.0 }
+      ]
+    },
+    {
+      date: '2025-04-16',
+      day: 16,
+      pl: 311,
+      trades: 2,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'AMZN', ticket: 'AMZN2405C', type: 'Call', pl: 180, plPercent: 2.6 },
+        { symbol: 'AAPL', ticket: 'AAPL2405C', type: 'Call', pl: 131, plPercent: 2.4 }
+      ]
+    },
+    {
+      date: '2025-04-17',
+      day: 17,
+      pl: 170,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'GOOG', ticket: 'GOOG2405P', type: 'Put', pl: 170, plPercent: 2.9 }
+      ]
+    },
+    {
+      date: '2025-04-21',
+      day: 21,
+      pl: -222,
+      trades: 3,
+      winRate: 0,
+      type: 'loss',
+      tradesInfo: [
+        { symbol: 'TSLA', ticket: 'TSLA2405C', type: 'Call', pl: -120, plPercent: -2.5 },
+        { symbol: 'SPY', ticket: 'SPY2405P', type: 'Put', pl: -102, plPercent: -1.8 }
+      ]
+    },
+    {
+      date: '2025-04-22',
+      day: 22,
+      pl: -546,
+      trades: 2,
+      winRate: 0,
+      type: 'loss',
+      tradesInfo: [
+        { symbol: 'AAPL', ticket: 'AAPL2405P', type: 'Put', pl: -300, plPercent: -4.9 },
+        { symbol: 'NVDA', ticket: 'NVDA2405C', type: 'Call', pl: -246, plPercent: -3.6 }
+      ]
+    },
+    {
+      date: '2025-04-23',
+      day: 23,
+      pl: 248,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'MSFT', ticket: 'MSFT2405C', type: 'Call', pl: 248, plPercent: 4.2 }
+      ]
+    },
+    {
+      date: '2025-04-24',
+      day: 24,
+      pl: -493,
+      trades: 5,
+      winRate: 40,
+      type: 'loss',
+      tradesInfo: [
+        { symbol: 'QQQ', ticket: 'QQQ2405P', type: 'Put', pl: -93, plPercent: -1.6 },
+        { symbol: 'GOOG', ticket: 'GOOG2405P', type: 'Put', pl: -220, plPercent: -3.2 },
+        { symbol: 'TSLA', ticket: 'TSLA2405C', type: 'Call', pl: -180, plPercent: -3.8 }
+      ]
+    },
+    {
+      date: '2025-04-28',
+      day: 28,
+      pl: 570,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'SPY', ticket: 'SPY2405C', type: 'Call', pl: 570, plPercent: 6.8 }
+      ]
+    }
   ],
   '2026-04': [
-    { date: '2026-04-01', day: 1, pl: 450, trades: 2, winRate: 100, type: 'win' },
-    { date: '2026-04-03', day: 3, pl: 620, trades: 2, winRate: 50, type: 'mixed' },
-    { date: '2026-04-05', day: 5, pl: 520, trades: 1, winRate: 100, type: 'win' },
-    { date: '2026-04-08', day: 8, pl: 890, trades: 3, winRate: 100, type: 'win' },
-    { date: '2026-04-12', day: 12, pl: 750, trades: 2, winRate: 100, type: 'win' },
-    { date: '2026-04-15', day: 15, pl: 630, trades: 1, winRate: 100, type: 'win' },
-    { date: '2026-04-18', day: 18, pl: 780, trades: 2, winRate: 100, type: 'win' },
-    { date: '2026-04-22', day: 22, pl: 540, trades: 2, winRate: 100, type: 'win' },
-    { date: '2026-04-25', day: 25, pl: 710, trades: 1, winRate: 100, type: 'win' },
-    { date: '2026-04-29', day: 29, pl: 480, trades: 2, winRate: 100, type: 'win' }
+    {
+      date: '2026-04-01',
+      day: 1,
+      pl: 450,
+      trades: 2,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'AAPL', ticket: 'AAPL2604C', type: 'Call', pl: 280, plPercent: 5.5 },
+        { symbol: 'SPY', ticket: 'SPY2604P', type: 'Put', pl: 170, plPercent: 3.3 }
+      ]
+    },
+    {
+      date: '2026-04-03',
+      day: 3,
+      pl: 620,
+      trades: 2,
+      winRate: 50,
+      type: 'mixed',
+      tradesInfo: [
+        { symbol: 'NVDA', ticket: 'NVDA2604C', type: 'Call', pl: 430, plPercent: 8.5 },
+        { symbol: 'QQQ', ticket: 'QQQ2604P', type: 'Put', pl: 190, plPercent: 3.1 }
+      ]
+    },
+    {
+      date: '2026-04-05',
+      day: 5,
+      pl: 520,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'MSFT', ticket: 'MSFT2604C', type: 'Call', pl: 520, plPercent: 5.6 }
+      ]
+    },
+    {
+      date: '2026-04-08',
+      day: 8,
+      pl: 890,
+      trades: 3,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'GOOG', ticket: 'GOOG2604C', type: 'Call', pl: 470, plPercent: 7.2 },
+        { symbol: 'AMZN', ticket: 'AMZN2604P', type: 'Put', pl: 420, plPercent: 5.4 }
+      ]
+    },
+    {
+      date: '2026-04-12',
+      day: 12,
+      pl: 750,
+      trades: 2,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'TSLA', ticket: 'TSLA2604P', type: 'Put', pl: 410, plPercent: 6.0 },
+        { symbol: 'SPY', ticket: 'SPY2604C', type: 'Call', pl: 340, plPercent: 4.8 }
+      ]
+    },
+    {
+      date: '2026-04-15',
+      day: 15,
+      pl: 630,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'NFLX', ticket: 'NFLX2604C', type: 'Call', pl: 630, plPercent: 6.3 }
+      ]
+    },
+    {
+      date: '2026-04-18',
+      day: 18,
+      pl: 780,
+      trades: 2,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'AAPL', ticket: 'AAPL2604C', type: 'Call', pl: 380, plPercent: 5.2 },
+        { symbol: 'MSFT', ticket: 'MSFT2604P', type: 'Put', pl: 400, plPercent: 6.1 }
+      ]
+    },
+    {
+      date: '2026-04-22',
+      day: 22,
+      pl: 540,
+      trades: 2,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'NVDA', ticket: 'NVDA2604C', type: 'Call', pl: 290, plPercent: 4.7 },
+        { symbol: 'SPY', ticket: 'SPY2604C', type: 'Call', pl: 250, plPercent: 3.9 }
+      ]
+    },
+    {
+      date: '2026-04-25',
+      day: 25,
+      pl: 710,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'GOOG', ticket: 'GOOG2604C', type: 'Call', pl: 710, plPercent: 7.3 }
+      ]
+    },
+    {
+      date: '2026-04-29',
+      day: 29,
+      pl: 480,
+      trades: 2,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'AMZN', ticket: 'AMZN2604C', type: 'Call', pl: 280, plPercent: 4.1 },
+        { symbol: 'AAPL', ticket: 'AAPL2604P', type: 'Put', pl: 200, plPercent: 2.9 }
+      ]
+    }
   ],
   '2026-05': [
-    { date: '2026-05-20', day: 20, pl: 1620, trades: 2, winRate: 100, type: 'win' },
-    { date: '2026-05-21', day: 21, pl: 920, trades: 1, winRate: 100, type: 'win' },
-    { date: '2026-05-22', day: 22, pl: 870, trades: 1, winRate: 100, type: 'win' },
-    { date: '2026-05-23', day: 23, pl: 1290, trades: 1, winRate: 100, type: 'win' },
-    { date: '2026-05-24', day: 24, pl: 950, trades: 2, winRate: 100, type: 'win' }
+    {
+      date: '2026-05-20',
+      day: 20,
+      pl: 1620,
+      trades: 2,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'AAPL', ticket: 'AAPL2605C', type: 'Call', pl: 900, plPercent: 10.1 },
+        { symbol: 'NVDA', ticket: 'NVDA2605P', type: 'Put', pl: 720, plPercent: 8.2 }
+      ]
+    },
+    {
+      date: '2026-05-21',
+      day: 21,
+      pl: 920,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'MSFT', ticket: 'MSFT2605C', type: 'Call', pl: 920, plPercent: 7.6 }
+      ]
+    },
+    {
+      date: '2026-05-22',
+      day: 22,
+      pl: 870,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'GOOG', ticket: 'GOOG2605P', type: 'Put', pl: 870, plPercent: 9.0, status: 'Pending' }
+      ]
+    },
+    {
+      date: '2026-05-23',
+      day: 23,
+      pl: 1290,
+      trades: 1,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'TSLA', ticket: 'TSLA2605C', type: 'Call', pl: 1290, plPercent: 12.6 }
+      ]
+    },
+    {
+      date: '2026-05-24',
+      day: 24,
+      pl: 950,
+      trades: 2,
+      winRate: 100,
+      type: 'win',
+      tradesInfo: [
+        { symbol: 'SPY', ticket: 'SPY2605C', type: 'Call', pl: 530, plPercent: 4.8 },
+        { symbol: 'QQQ', ticket: 'QQQ2605P', type: 'Put', pl: 420, plPercent: 3.9 }
+      ]
+    }
   ]
 };
 
@@ -78,11 +433,16 @@ const weekPortfolioData = [
   { date: 'W5', value: 103900 }
 ];
 
-const monthsPortfolioData = [
-  { date: 'Jan', value: 50000 },
-  { date: 'Feb', value: 55000 },
-  { date: 'Mar', value: 60000 },
-  { date: 'Apr', value: 70000 },
+const monthPortfolioData = [
+  { date: 'Week 1', value: 95000 },
+  { date: 'Week 2', value: 97200 },
+  { date: 'Week 3', value: 99500 },
+  { date: 'Week 4', value: 103900 }
+];
+
+const threeMonthsPortfolioData = [
+  { date: 'Mar', value: 95000 },
+  { date: 'Apr', value: 105000 },
   { date: 'May', value: 103900 }
 ];
 
@@ -113,6 +473,7 @@ function App() {
   const [currentMonth, setCurrentMonth] = useState('2026-05');
   const [showPortfolioChart, setShowPortfolioChart] = useState(false);
   const [dateRange, setDateRange] = useState('week');
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,7 +529,9 @@ function App() {
       case 'week':
         return weekPortfolioData;
       case 'month':
-        return monthsPortfolioData;
+        return monthPortfolioData;
+      case 'threeMonths':
+        return threeMonthsPortfolioData;
       case 'sixmonths':
         return sixMonthsPortfolioData;
       case 'year':
@@ -178,31 +541,67 @@ function App() {
     }
   };
 
+  const selectedDayData = selectedDate
+    ? currentMonthTrades.find((t) => t.date === selectedDate) || {
+        date: selectedDate,
+        day: parseInt(selectedDate.split('-')[2], 10),
+        pl: 0,
+        trades: 0,
+        winRate: 0,
+        type: 'no-trade',
+        tradesInfo: []
+      }
+    : null;
+
   const calculateWeeklyStats = () => {
-    const weeks: { [key: number]: { pl: number; trades: number; days: number; type: 'win' | 'loss' | 'mixed' } } = {};
+    const rows: Array<{
+      cells: Array<null | { day: number; dateStr: string; dayData: typeof selectedDayData }>; 
+      rowPl: number;
+      rowTrades: number;
+    }> = [];
 
-    currentMonthTrades.forEach((trade) => {
-      const week = Math.ceil(trade.day / 7);
-      if (!weeks[week]) {
-        weeks[week] = { pl: 0, trades: 0, days: 0, type: 'mixed' };
+    let currentDay = 1;
+    const totalCells = firstDayOfMonth + daysInMonth;
+    const totalRows = Math.ceil(totalCells / 7);
+
+    for (let row = 0; row < totalRows; row += 1) {
+      let rowPl = 0;
+      let rowTrades = 0;
+      const cells: Array<null | { day: number; dateStr: string; dayData: typeof currentMonthTrades[number] | null }> = [];
+
+      for (let col = 0; col < 7; col += 1) {
+        const cellIndex = row * 7 + col;
+        if (cellIndex < firstDayOfMonth || currentDay > daysInMonth) {
+          cells.push(null);
+        } else {
+          const dateStr = `${currentMonth}-${String(currentDay).padStart(2, '0')}`;
+          const existingDayData = currentMonthTrades.find((t) => t.date === dateStr);
+          const dayData = existingDayData || {
+            date: dateStr,
+            day: currentDay,
+            pl: 0,
+            trades: 0,
+            winRate: 0,
+            type: 'no-trade',
+            tradesInfo: []
+          };
+
+          rowPl += dayData.pl;
+          rowTrades += dayData.trades;
+          cells.push({ day: currentDay, dateStr, dayData });
+          currentDay += 1;
+        }
       }
-      weeks[week].pl += trade.pl;
-      weeks[week].trades += trade.trades;
-      weeks[week].days += 1;
 
-      if (trade.pl > 0 && weeks[week].type !== 'mixed') {
-        weeks[week].type = 'win';
-      } else if (trade.pl < 0) {
-        weeks[week].type = 'loss';
-      } else if (weeks[week].type === 'win') {
-        weeks[week].type = 'mixed';
-      }
-    });
+      rows.push({ cells, rowPl, rowTrades });
+    }
 
-    return weeks;
+    return rows;
   };
 
-  const weeklyStats = calculateWeeklyStats();
+  const calendarRows = calculateWeeklyStats();
+  const monthNet = currentMonthTrades.reduce((sum, item) => sum + item.pl, 0);
+  const monthTrades = currentMonthTrades.reduce((sum, item) => sum + item.trades, 0);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -303,10 +702,10 @@ function App() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-600 transition hover:bg-slate-200 hover:text-slate-900"
-                      title="X (Twitter)"
+                      title="X"
                     >
-                      <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.25 7-7 7-7a10.6 10.6 0 01-10-10.5z" />
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M6 18L18 6" />
                       </svg>
                     </a>
                     <a
@@ -398,11 +797,12 @@ function App() {
                 <div className="rounded-[1.5rem] bg-white p-8 shadow-md">
                   <div className="mb-6 flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-slate-950">Portfolio History</h3>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-wrap">
                       {[
                         { label: 'Day', value: 'day' },
                         { label: 'Week', value: 'week' },
-                        { label: '3M', value: 'month' },
+                        { label: 'Month', value: 'month' },
+                        { label: '3M', value: 'threeMonths' },
                         { label: '6M', value: 'sixmonths' },
                         { label: '1Y', value: 'year' },
                         { label: 'All', value: 'all' }
@@ -458,8 +858,8 @@ function App() {
 
               {/* Trade Calendar */}
               <div className="rounded-[1.5rem] bg-slate-900 p-8 shadow-lg">
-                <div className="mb-8 flex items-center justify-between">
-                  <div className="flex items-center gap-6">
+                <div className="mb-8 grid gap-6 xl:grid-cols-[1fr_auto]">
+                  <div className="flex flex-wrap items-center gap-6">
                     <button
                       onClick={() => changeMonth(-1)}
                       className="rounded-full p-2 transition hover:bg-slate-800"
@@ -479,85 +879,158 @@ function App() {
                       This month
                     </button>
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-slate-300">
-                    <div className="flex items-center gap-2">
-                      <span className="h-3 w-3 rounded-full bg-emerald-500"></span>
-                      <span>Green = Profit</span>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="rounded-3xl border border-slate-700 bg-slate-800/95 p-4">
+                      <p className="text-sm uppercase tracking-[0.24em] text-slate-200">Month net</p>
+                      <p className={`mt-2 text-2xl font-semibold ${monthNet >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        {monthNet >= 0 ? '+' : ''}${monthNet.toLocaleString()}
+                      </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="h-3 w-3 rounded-full bg-red-600"></span>
-                      <span>Red = Loss</span>
+                    <div className="rounded-3xl border border-slate-700 bg-slate-800/95 p-4">
+                      <p className="text-sm uppercase tracking-[0.24em] text-slate-200">Total trades</p>
+                      <p className="mt-2 text-2xl font-semibold text-white">{monthTrades}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-[1fr_auto] gap-8">
-                  {/* Calendar */}
-                  <div>
-                    <div className="grid grid-cols-7 gap-2 mb-4">
-                      {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                        <div key={day} className="text-center font-semibold text-slate-400 py-2 text-sm">
-                          {day}
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="grid grid-cols-7 gap-2">
-                      {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-                        <div key={`empty-${i}`} className="aspect-square" />
-                      ))}
-
-                      {Array.from({ length: daysInMonth }).map((_, i) => {
-                        const day = i + 1;
-                        const dateStr = `${currentMonth}-${String(day).padStart(2, '0')}`;
-                        const dayData = currentMonthTrades.find((t) => t.date === dateStr);
-
-                        if (!dayData) {
-                          return <div key={day} className="aspect-square rounded-lg bg-slate-800" />;
-                        }
-
-                        const isPositive = dayData.pl > 0;
-                        const isNegative = dayData.pl < 0;
-
-                        return (
-                          <div
-                            key={day}
-                            className={`aspect-square rounded-lg border-2 p-2 flex flex-col justify-center items-center text-center transition ${
-                              isPositive
-                                ? 'border-emerald-500/50 bg-emerald-950/30'
-                                : isNegative
-                                ? 'border-red-600/50 bg-red-950/30'
-                                : 'border-slate-700 bg-slate-800'
-                            }`}
-                          >
-                            <p className="text-xs text-slate-400 font-medium">{day}</p>
-                            <p className={`text-sm font-bold mt-1 ${isPositive ? 'text-emerald-400' : isNegative ? 'text-red-400' : 'text-slate-300'}`}>
-                              ${Math.abs(dayData.pl)}
-                            </p>
-                            <p className="text-xs text-slate-500">{dayData.trades} trade(s)</p>
-                          </div>
-                        );
-                      })}
-                    </div>
+                <div>
+                  <div className="grid grid-cols-7 gap-2 mb-4">
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                      <div key={day} className="text-center font-semibold text-slate-400 py-2 text-sm">
+                        {day}
+                      </div>
+                    ))}
                   </div>
 
-                  {/* Weekly Stats */}
-                  <div className="space-y-3 min-w-[180px]">
-                    {Object.entries(weeklyStats).map(([week, stats]) => {
-                      const isPositive = stats.pl > 0;
-                      return (
-                        <div key={week} className="rounded-lg bg-slate-800 p-4 border border-slate-700">
-                          <p className="text-sm font-semibold text-slate-400">Week {week}</p>
-                          <p className={`text-xl font-bold mt-2 ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
-                            ${stats.pl > 0 ? '+' : ''}{stats.pl.toLocaleString()}
-                          </p>
-                          <p className="text-xs text-slate-500 mt-1">{stats.days} day(s)</p>
+                  <div className="space-y-2">
+                    {calendarRows.map((week, rowIndex) => (
+                      <div
+                        key={rowIndex}
+                        className="grid gap-2"
+                        style={{ gridTemplateColumns: 'repeat(7, minmax(0, 1fr)) 160px' }}
+                      >
+                        {week.cells.map((cell, idx) => {
+                          if (!cell) {
+                            return <div key={`${rowIndex}-${idx}`} className="aspect-square rounded-lg bg-slate-800" />;
+                          }
+
+                          const { day, dateStr, dayData } = cell;
+                          const hasPendingTrade = dayData.tradesInfo?.some((trade) => trade.status?.toLowerCase() === 'pending');
+                          const isPositive = !hasPendingTrade && dayData.trades > 0 && dayData.pl > 0;
+                          const isNegative = !hasPendingTrade && dayData.trades > 0 && dayData.pl <= 0;
+                          const isSelected = selectedDate === dateStr;
+                          const dayStatus = hasPendingTrade ? 'pending' : isPositive ? 'positive' : isNegative ? 'negative' : 'empty';
+
+                          return (
+                            <button
+                              key={`${rowIndex}-${idx}`}
+                              onClick={() => setSelectedDate(dateStr)}
+                              className={`aspect-square rounded-lg border-2 p-2 flex flex-col justify-between text-left transition duration-200 ease-out ${
+                                isSelected
+                                  ? 'border-indigo-400 bg-slate-700 shadow-lg shadow-indigo-500/20'
+                                  : dayStatus === 'positive'
+                                  ? 'border-emerald-300 bg-emerald-100/90 hover:border-emerald-400 hover:bg-emerald-100 hover:scale-[1.02]'
+                                  : dayStatus === 'pending'
+                                  ? 'border-amber-300 bg-amber-100/90 hover:border-amber-400 hover:bg-amber-100 hover:scale-[1.02]'
+                                  : dayStatus === 'negative'
+                                  ? 'border-red-300 bg-red-100/90 hover:border-red-400 hover:bg-red-100 hover:scale-[1.02]'
+                                  : 'border-slate-700 bg-slate-800/90 hover:border-slate-500 hover:bg-slate-800/90'
+                              }`}
+                            >
+                              <div>
+                                <p className="text-xs text-slate-500 font-medium">{day}</p>
+                                <p className={`text-sm font-semibold mt-1 ${
+                                  dayStatus === 'positive'
+                                    ? 'text-emerald-700'
+                                    : dayStatus === 'pending'
+                                    ? 'text-amber-700'
+                                    : 'text-slate-500'
+                                }`}>
+                                  {dayData.pl > 0 ? '+' : ''}${Math.abs(dayData.pl)}
+                                </p>
+                              </div>
+                              <div className="text-[11px] uppercase tracking-[0.18em] text-slate-500">
+                                {dayData.trades} trades
+                              </div>
+                            </button>
+                          );
+                        })}
+
+                        <div className="rounded-3xl border border-slate-700 bg-slate-800/80 p-4 text-sm text-slate-200">
+                          <div className="mb-2 text-slate-400">Week total</div>
+                          <div className={`text-xl font-semibold ${week.rowPl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                            {week.rowPl >= 0 ? '+' : ''}${week.rowPl.toLocaleString()}
+                          </div>
+                          <div className="text-xs text-slate-500 mt-1">{week.rowTrades} trades</div>
                         </div>
-                      );
-                    })}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
+
+              {selectedDayData && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-sm">
+                  <button
+                    onClick={() => setSelectedDate(null)}
+                    aria-label="Close trade details"
+                    className="absolute right-6 top-6 inline-flex h-14 w-14 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-900 text-2xl font-bold shadow-2xl shadow-black/25 transition hover:bg-slate-100"
+                  >
+                    ×
+                  </button>
+                  <div className="relative w-full max-w-3xl rounded-[2rem] bg-slate-900 p-6 shadow-2xl shadow-slate-950/40">
+                    <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Trade day details</p>
+                        <h2 className="mt-2 text-2xl font-semibold text-white">{new Date(selectedDayData.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</h2>
+                      </div>
+                      <div className="rounded-full border border-slate-700 bg-slate-800 px-4 py-2 text-xs uppercase tracking-[0.24em] text-slate-300">
+                        {selectedDayData.type === 'no-trade' ? 'No trades' : selectedDayData.type}
+                      </div>
+                    </div>
+
+                    <div className="rounded-3xl border border-slate-700 bg-slate-800/90 p-4 mb-6">
+                      <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Trades</p>
+                      <p className="mt-2 text-xl font-semibold text-white">{selectedDayData.trades}</p>
+                    </div>
+
+                    {selectedDayData.tradesInfo.length > 0 ? (
+                      <div className="overflow-x-auto rounded-3xl border border-slate-700 bg-slate-950/80 p-4">
+                        <table className="min-w-full text-left text-sm text-slate-200">
+                          <thead>
+                            <tr className="border-b border-slate-700 text-slate-400">
+                              <th className="px-3 py-2">Symbol</th>
+                              <th className="px-3 py-2">Ticket</th>
+                              <th className="px-3 py-2">Type</th>
+                              <th className="px-3 py-2">Status</th>
+                              <th className="px-3 py-2">P/L $</th>
+                              <th className="px-3 py-2">P/L %</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {selectedDayData.tradesInfo.map((trade, index) => (
+                              <tr key={index} className="border-b border-slate-700 last:border-b-0">
+                                <td className="px-3 py-3 font-medium text-white">{trade.symbol}</td>
+                                <td className="px-3 py-3 text-slate-300">{trade.ticket}</td>
+                                <td className="px-3 py-3 text-slate-300">{trade.type}</td>
+                                <td className="px-3 py-3 text-slate-300">{trade.status || 'Closed'}</td>
+                                <td className={`px-3 py-3 font-semibold ${trade.pl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>{trade.pl >= 0 ? '+' : ''}${trade.pl}</td>
+                                <td className={`px-3 py-3 ${trade.plPercent >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>{trade.plPercent >= 0 ? '+' : ''}{trade.plPercent}%</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    ) : (
+                      <div className="rounded-3xl border border-slate-700 bg-slate-950/80 p-6 text-slate-300">
+                        <p className="text-base font-semibold text-white">No trades for this day</p>
+                        <p className="mt-2 text-sm text-slate-400">This day had no recorded trades, but it's still visible in the calendar so you can review the schedule.</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </main>
         </>
